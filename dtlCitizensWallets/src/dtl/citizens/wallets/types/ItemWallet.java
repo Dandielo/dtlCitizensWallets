@@ -1,12 +1,9 @@
 package dtl.citizens.wallets.types;
 
-import java.util.List;
-
-import org.bukkit.inventory.ItemStack;
-
 import net.citizensnpcs.api.util.DataKey;
 import dtl.citizens.wallets.AbstractWallet;
 
+//TODO Wokring on a "good" trading system using only items
 public class ItemWallet extends AbstractWallet {
 
 	public ItemWallet(String typeName) {
@@ -29,7 +26,7 @@ public class ItemWallet extends AbstractWallet {
 		return 0;
 	}
 	
-	@Override
+	/*@Override
 	public boolean depositItems(List<ItemStack> items)
 	{
 		return false;
@@ -39,7 +36,7 @@ public class ItemWallet extends AbstractWallet {
 	public boolean withdrawItems(List<ItemStack> items)
 	{
 		return false;
-	}
+	}*/
 
 	@Override
 	public void load(DataKey key) {

@@ -8,9 +8,14 @@ import java.util.logging.Logger;
 
 import net.citizensnpcs.api.util.DataKey;
 import net.milkbowl.vault.economy.Economy;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.massivecraft.factions.P;
+import com.palmergames.bukkit.towny.Towny;
 
 import dtl.citizens.wallets.types.PlayerWallet;
 
@@ -23,6 +28,9 @@ public class Wallets extends JavaPlugin {
 
 	//Economy plugin
 	private static Economy economy;
+	private static SimpleClans clans;
+	private static Towny towny;
+	private static P factions;
 	
 	//plugin instance
 	private static Wallets instance;
@@ -62,6 +70,26 @@ public class Wallets extends JavaPlugin {
         	info("Economy plugin not found! Disabling plugin");
 			this.getPluginLoader().disablePlugin(this);
 			return;
+		}
+	}
+	
+	//Hooking into clans and towny bank account
+	public void initializeSoftDependPlugins()
+	{
+		clans = (SimpleClans) Bukkit.getPluginManager().getPlugin("SimpleClans");
+		if ( clans != null )
+		{
+			info("Hooked into " + clans.getDescription().getFullName());
+		}
+		towny = (Towny) Bukkit.getPluginManager().getPlugin("Towny");
+		if ( towny != null )
+		{
+			info("Hooked into " + towny.getDescription().getFullName());
+		}
+		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
+		if ( factions != null )
+		{
+			info("Hooked into " + factions.getDescription().getFullName());
 		}
 	}
 	
@@ -115,6 +143,21 @@ public class Wallets extends JavaPlugin {
 	public static Economy getEconomy()
 	{
 		return economy;
+	}
+	
+	public static P getFactions()
+	{
+		return factions;
+	}
+	
+	public static SimpleClans getSimpleClans()
+	{
+		return clans;
+	}
+	
+	public static Towny getTowny()
+	{
+		return towny;
 	}
 	
 	//logger info
