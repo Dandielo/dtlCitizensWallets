@@ -9,6 +9,7 @@ public class SimpleClansWallet extends AbstractWallet {
 
 	public SimpleClansWallet(String typeName) {
 		super(typeName);
+		clan = null;
 	}
 
 	private Clan clan;
