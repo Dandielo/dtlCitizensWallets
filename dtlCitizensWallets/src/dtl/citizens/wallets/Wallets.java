@@ -12,7 +12,8 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import types.PlayerWallet;
+import dtl.citizens.wallets.types.PlayerWallet;
+
 
 public class Wallets extends JavaPlugin {
 	protected final static Logger logger = Logger.getLogger("Minecraft");

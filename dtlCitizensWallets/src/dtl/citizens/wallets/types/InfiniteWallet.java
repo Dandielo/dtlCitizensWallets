@@ -1,4 +1,4 @@
-package types;
+package dtl.citizens.wallets.types;
 
 import net.citizensnpcs.api.util.DataKey;
 import dtl.citizens.wallets.AbstractWallet;

@@ -1,4 +1,4 @@
-package types;
+package dtl.citizens.wallets.types;
 
 import java.util.List;
 
