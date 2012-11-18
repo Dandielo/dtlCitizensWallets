@@ -17,7 +17,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.massivecraft.factions.P;
 import com.palmergames.bukkit.towny.Towny;
 
+import dtl.citizens.wallets.types.BankWallet;
 import dtl.citizens.wallets.types.PlayerWallet;
+import dtl.citizens.wallets.types.PrivateWallet;
 
 
 public class Wallets extends JavaPlugin {
@@ -39,6 +41,8 @@ public class Wallets extends JavaPlugin {
 	public void onEnable()
 	{
 		registerWalletType("player", PlayerWallet.class);
+		registerWalletType("bank", BankWallet.class);
+		registerWalletType("private", PrivateWallet.class);
 		initEcon();
 		
 		instance = this;
