@@ -1,11 +1,11 @@
-package dtl.citizens.wallets.types;
+package net.dtl.citizens.wallets.types;
 
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
 
 import net.citizensnpcs.api.util.DataKey;
-import dtl.citizens.wallets.AbstractWallet;
-import dtl.citizens.wallets.Wallets;
+import net.dtl.citizens.wallets.AbstractWallet;
+import net.dtl.citizens.wallets.Wallets;
 
 public class TownyWallet extends AbstractWallet {
 

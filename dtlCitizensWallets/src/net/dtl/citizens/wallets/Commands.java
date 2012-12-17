@@ -1,4 +1,4 @@
-package dtl.citizens.wallets;
+package net.dtl.citizens.wallets;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

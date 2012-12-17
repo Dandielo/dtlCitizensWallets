@@ -1,14 +1,25 @@
-package dtl.citizens.wallets;
+package net.dtl.citizens.wallets;
 
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
 
 public class WalletTrait extends Trait {
-	protected WalletTrait(String name) {
-		super(name);
+	public WalletTrait() {
+		super("wallet");
 	}
 
 	private AbstractWallet wallet;
+	
+	public AbstractWallet getWallet()
+	{
+		return wallet;
+	}
+	
+	@Override
+	public void onAttach()
+	{
+		wallet = Wallets.getInstance().getWalletObject("private");
+	}
 	
 	@Override
 	public void load(DataKey data)
@@ -17,6 +28,7 @@ public class WalletTrait extends Trait {
 		if ( wallet != null )
 			wallet.load(data);
 	}
+	
 	@Override
 	public void save(DataKey data)
 	{

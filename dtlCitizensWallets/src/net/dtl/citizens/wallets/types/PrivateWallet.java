@@ -1,7 +1,7 @@
-package dtl.citizens.wallets.types;
+package net.dtl.citizens.wallets.types;
 
 import net.citizensnpcs.api.util.DataKey;
-import dtl.citizens.wallets.AbstractWallet;
+import net.dtl.citizens.wallets.AbstractWallet;
 
 public class PrivateWallet extends AbstractWallet {
 	private double balance;

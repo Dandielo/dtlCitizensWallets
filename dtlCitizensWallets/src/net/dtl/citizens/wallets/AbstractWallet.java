@@ -1,4 +1,4 @@
-package dtl.citizens.wallets;
+package net.dtl.citizens.wallets;
 
 import net.citizensnpcs.api.util.DataKey;
 import net.milkbowl.vault.economy.Economy;
