@@ -12,7 +12,7 @@
 		<citizens.version>2.0.6-SNAPSHOT</citizens.version>
 		<vault.version>1.2.13-SNAPSHOT</vault.version>
 		<denizen.version>0.8-PRERELEASE</denizen.version>
-		<wallets.version>1.0.0-SNAPSHOT</wallets.version>
+		<clans.version>2.3.3</clans.version>
 				<build.number>Unknown</build.number>
 	</properties>
 
@@ -29,6 +29,10 @@
 		<repository>
 			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
+		</repository>
+		<repository>
+			<id>clans-repo</id>
+			<url>http://repo.sacredlabyrinth.net:8081/artifactory/ext-release-local</url>
 		</repository>
 	</repositories> 
 	
@@ -55,11 +59,16 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency> 
+		<dependency>
+			<groupId>net.sacredlabyrinth.phaed</groupId>
+			<artifactId>simpleclans</artifactId>
+			<version>${clans.version}</version> 
+			<type>jar</type>
+			<scope>provided</scope> 
+		</dependency> 
  	</dependencies> 
 
   <build>
-    
-    <sourceDirectory>src</sourceDirectory>
 	<directory>${basedir}/target</directory>
 	<finalName>${artifactId}-${version}</finalName>
   

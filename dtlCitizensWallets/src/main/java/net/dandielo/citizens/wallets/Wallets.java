@@ -1,4 +1,4 @@
-package net.dtl.citizens.wallets;
+package net.dandielo.citizens.wallets;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,12 +10,12 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.api.util.DataKey;
-import net.dtl.citizens.wallets.types.BankWallet;
-import net.dtl.citizens.wallets.types.FactionsWallet;
-import net.dtl.citizens.wallets.types.PlayerWallet;
-import net.dtl.citizens.wallets.types.PrivateWallet;
-import net.dtl.citizens.wallets.types.SimpleClansWallet;
-import net.dtl.citizens.wallets.types.TownyWallet;
+import net.dandielo.citizens.wallets.types.BankWallet;
+import net.dandielo.citizens.wallets.types.PlayerWallet;
+import net.dandielo.citizens.wallets.types.PrivateWallet;
+import net.dandielo.citizens.wallets.types.SimpleClansWallet;
+import net.dandielo.citizens.wallets.types.TownyWallet;
+//import net.dtl.citizens.wallets.types.FactionsWallet;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.massivecraft.factions.P;
+//import com.massivecraft.factions.P;
 import com.palmergames.bukkit.towny.Towny;
 
 
@@ -38,7 +38,7 @@ public class Wallets extends JavaPlugin {
 	private static Economy economy;
 	private static SimpleClans clans;
 	private static Towny towny;
-	private static P factions;
+	//private static P factions;
 	
 	//plugin instance
 	private static Wallets instance;
@@ -56,8 +56,8 @@ public class Wallets extends JavaPlugin {
 			registerWalletType("Town", TownyWallet.class);
 		if ( clans != null )
 			registerWalletType("Clan", SimpleClansWallet.class);
-		if ( factions != null )
-			registerWalletType("Faction", FactionsWallet.class);
+	/*	if ( factions != null )
+			registerWalletType("Faction", FactionsWallet.class);*/
 		
 		initEcon();
 		
@@ -106,11 +106,11 @@ public class Wallets extends JavaPlugin {
 		{
 			info("Hooked into " + towny.getDescription().getFullName());
 		}
-		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
+/*		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
 		if ( factions != null )
 		{
 			info("Hooked into " + factions.getDescription().getFullName());
-		}
+		}*/
 	}
 	
 	public boolean registerWalletType(String name, Class<? extends AbstractWallet> type)
@@ -191,10 +191,10 @@ public class Wallets extends JavaPlugin {
 		return economy;
 	}
 	
-	public static P getFactions()
+/*	public static P getFactions()
 	{
 		return factions;
-	}
+	}*/
 	
 	public static SimpleClans getSimpleClans()
 	{

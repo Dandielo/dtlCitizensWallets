@@ -1,8 +1,8 @@
-package net.dtl.citizens.wallets.types;
+package net.dandielo.citizens.wallets.types;
 
 import net.citizensnpcs.api.util.DataKey;
-import net.dtl.citizens.wallets.AbstractWallet;
-import net.dtl.citizens.wallets.Wallets;
+import net.dandielo.citizens.wallets.AbstractWallet;
+import net.dandielo.citizens.wallets.Wallets;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 
 public class SimpleClansWallet extends AbstractWallet {

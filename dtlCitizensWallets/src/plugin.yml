@@ -1,7 +1,0 @@
-name: dtlWallets
-main: net.dtl.citizens.wallets.Wallets
-depend: [Citizens,Vault]
-soft-depend: [Towny,SimpleClans,bPermissions]
-version: 0.1 Alpha
-description: >
-             Wallets for every character trait for Citizens 2!

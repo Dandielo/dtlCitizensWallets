@@ -1,4 +1,4 @@
-package net.dtl.citizens.wallets;
+package net.dandielo.citizens.wallets;
 
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;

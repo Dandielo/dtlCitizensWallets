@@ -1,4 +1,4 @@
-package net.dtl.citizens.wallets;
+package net.dandielo.citizens.wallets;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
