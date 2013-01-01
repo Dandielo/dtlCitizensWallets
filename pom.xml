@@ -75,6 +75,9 @@
     <resources>
       <resource>
         <directory>src</directory>
+        <includes>
+        	<include>*.yml</include>
+        </includes>
         <excludes>
         	<exclude>**/*.java</exclude>
         </excludes>
