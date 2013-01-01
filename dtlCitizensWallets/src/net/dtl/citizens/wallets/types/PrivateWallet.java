@@ -33,7 +33,7 @@ public class PrivateWallet extends AbstractWallet {
 
 	@Override
 	public void load(DataKey key) {
-		key.getDouble("balance");
+		balance = key.getDouble("balance");
 	}
 
 	@Override

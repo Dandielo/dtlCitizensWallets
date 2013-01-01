@@ -162,9 +162,7 @@ public class Wallets extends JavaPlugin {
 			{
 				return wallets.get(type.toLowerCase()).getConstructor(String.class).newInstance(type.toLowerCase());
 			} 
-			catch (InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException e) 
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
@@ -180,9 +178,7 @@ public class Wallets extends JavaPlugin {
 			{
 				return wallets.get(name.toLowerCase()).getConstructor(String.class).newInstance(name.toLowerCase());
 			} 
-			catch (InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException e) 
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
