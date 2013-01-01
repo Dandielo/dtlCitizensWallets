@@ -14,7 +14,7 @@ import net.dandielo.citizens.wallets.types.BankWallet;
 import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
 import net.dandielo.citizens.wallets.types.SimpleClansWallet;
-import net.dandielo.citizens.wallets.types.TownyWallet;
+//import net.dandielo.citizens.wallets.types.TownyWallet;
 //import net.dtl.citizens.wallets.types.FactionsWallet;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -24,7 +24,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //import com.massivecraft.factions.P;
-import com.palmergames.bukkit.towny.Towny;
+//import com.palmergames.bukkit.towny.Towny;
 
 
 
@@ -37,7 +37,7 @@ public class Wallets extends JavaPlugin {
 	//Economy plugin
 	private static Economy economy;
 	private static SimpleClans clans;
-	private static Towny towny;
+//	private static Towny towny;
 	//private static P factions;
 	
 	//plugin instance
@@ -52,8 +52,8 @@ public class Wallets extends JavaPlugin {
 		registerWalletType("Bank", BankWallet.class);
 		registerWalletType("Private", PrivateWallet.class);
 		
-		if ( towny != null )
-			registerWalletType("Town", TownyWallet.class);
+		/*if ( towny != null )
+			registerWalletType("Town", TownyWallet.class);*/
 		if ( clans != null )
 			registerWalletType("Clan", SimpleClansWallet.class);
 	/*	if ( factions != null )
@@ -101,11 +101,11 @@ public class Wallets extends JavaPlugin {
 		{
 			info("Hooked into " + clans.getDescription().getFullName());
 		}
-		towny = (Towny) Bukkit.getPluginManager().getPlugin("Towny");
+	/*	towny = (Towny) Bukkit.getPluginManager().getPlugin("Towny");
 		if ( towny != null )
 		{
 			info("Hooked into " + towny.getDescription().getFullName());
-		}
+		}*/
 /*		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
 		if ( factions != null )
 		{
@@ -201,10 +201,10 @@ public class Wallets extends JavaPlugin {
 		return clans;
 	}
 	
-	public static Towny getTowny()
+/*	public static Towny getTowny()
 	{
 		return towny;
-	}
+	}*/
 	
 	//logger info
 	public static void info(String message)

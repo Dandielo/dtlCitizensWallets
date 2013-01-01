@@ -1,5 +1,5 @@
 package net.dandielo.citizens.wallets.types;
-
+/*
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
 import com.palmergames.bukkit.towny.object.Town;
 
@@ -78,4 +78,4 @@ public class TownyWallet extends AbstractWallet {
 		key.setString("town", town.getName());
 	}
 
-}
+}*/
