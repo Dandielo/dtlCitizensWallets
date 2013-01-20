@@ -11,8 +11,8 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.api.util.DataKey;
-import net.dandielo.citizens.wallets.command.commands.WalletCommands;
 import net.dandielo.citizens.wallets.types.BankWallet;
+import net.dandielo.citizens.wallets.types.GroupWallet;
 import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
 import net.dandielo.citizens.wallets.types.SimpleClansWallet;
@@ -49,9 +49,12 @@ public class Wallets extends JavaPlugin {
 	{
 		instance = this;
 		
+		cManager = new CommandManager();
+		
 		registerWalletType("Player", PlayerWallet.class);
 		registerWalletType("Bank", BankWallet.class);
 		registerWalletType("Private", PrivateWallet.class);
+		registerWalletType("Group", GroupWallet.class);
 		
 		/*if ( towny != null )
 			registerWalletType("Town", TownyWallet.class);*/
@@ -63,16 +66,16 @@ public class Wallets extends JavaPlugin {
 		initEcon();
 		
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
+		cManager.registerCommands(WalletCommands.class);
 		
-		cManager = new CommandManager();
-		registerCommands();
+	//	registerCommands();
 	}
 	
 	public void registerCommands()
 	{
 		try 
 		{
-			cManager.registerCommands(WalletCommands.class);
+		//	cManager.registerCommands(WalletCommands.class);
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -141,14 +144,11 @@ public class Wallets extends JavaPlugin {
 				return false;
 			
 			wallets.put(name.toLowerCase(), type);
+			cManager.registerCommands(type);
 			
 			info(name + " wallet registered sucessfully!");
 		}
-		catch (NoSuchMethodException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (SecurityException e)
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}

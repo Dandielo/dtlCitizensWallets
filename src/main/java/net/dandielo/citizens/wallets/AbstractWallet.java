@@ -1,9 +1,15 @@
 package net.dandielo.citizens.wallets;
 
+import java.text.DecimalFormat;
+
 import net.citizensnpcs.api.util.DataKey;
 import net.milkbowl.vault.economy.Economy;
 
 public abstract class AbstractWallet {
+	//Decimal format helper ;P
+	protected static DecimalFormat f = new DecimalFormat("#.##");
+	
+	//Abstract Wallet
 	protected Economy econ = Wallets.getEconomy();
 	protected final String typeName;
 	

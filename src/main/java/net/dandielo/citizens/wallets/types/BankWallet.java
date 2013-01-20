@@ -1,7 +1,15 @@
 package net.dandielo.citizens.wallets.types;
 
+import java.util.Map;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
+import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.wallets.AbstractWallet;
+import net.dandielo.citizens.wallets.Wallets;
+import net.dandielo.citizens.wallets.command.Command;
 
 public class BankWallet extends AbstractWallet {
 	protected String bankAccount;
@@ -35,6 +43,31 @@ public class BankWallet extends AbstractWallet {
 	public void save(DataKey key) {
 		key.setString("bank-account", bankAccount);
 	}
-
+	
+	public void setBank(String bank)
+	{
+		bankAccount = bank;
+	}
+	
+	public String getBank()
+	{
+		return bankAccount;
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "bank (account)",
+	perm = "dtl.wallets.commands")
+	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		if ( args.containsKey("account") )
+		{
+			bankAccount = args.get("account");
+			sender.sendMessage(ChatColor.GOLD + "New bank account: " + ChatColor.GREEN + bankAccount);
+		}
+		else
+			sender.sendMessage(ChatColor.GOLD + "Bank account: " + ChatColor.GREEN + bankAccount);
+		return true;
+	}
 
 }

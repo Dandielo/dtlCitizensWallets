@@ -7,15 +7,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.wallets.command.BukkitCommand;
 import net.dandielo.citizens.wallets.command.Command;
 import net.dandielo.citizens.wallets.command.WalletsExecutor;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_4_R1.CraftServer;
@@ -28,6 +29,8 @@ public class CommandManager {
 	
 	private Map<CommandSyntax, CommandBinding> commands;
 	private Map<Class<?>, Object> objects = new HashMap<Class<?>, Object>();
+	
+	private Map<NPC, ObjectEntry<Class<? extends AbstractWallet>,Object>> npcObjects = new HashMap<NPC, ObjectEntry<Class<? extends AbstractWallet>,Object>>();
 	
 	public CommandManager()
 	{
@@ -47,9 +50,19 @@ public class CommandManager {
 		}
 	}
 	
+	void registerWalletObject(NPC npc, AbstractWallet wallet)
+	{
+		npcObjects.put(npc, new ObjectEntry<Class<? extends AbstractWallet>, Object>(wallet.getClass(), wallet));
+	}
+	void unregisterWalletObject(NPC npc)
+	{
+		npcObjects.remove(npc);
+	}
+	
 	private void initCommandsBase()
 	{
-		try{
+		try
+		{
 			if(Bukkit.getServer() instanceof CraftServer)
 			{
 				final Field f = CraftServer.class.getDeclaredField("commandMap");
@@ -62,11 +75,26 @@ public class CommandManager {
             e.printStackTrace();
         }
 	}
-	public void registerCommands(Class<?> clazz) throws Exception
+	
+	protected void newInstance(Class<?> clazz)
 	{
-		if ( objects.containsKey(clazz) )
+		try
+		{
+			objects.put(clazz, clazz.newInstance());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	void registerCommands(Class<?> clazz)
+	{
+		if ( objects.containsKey(clazz) ) 
 			return;
-		objects.put(clazz, clazz.newInstance());
+		
+		if ( !clazz.getSuperclass().equals(AbstractWallet.class) )
+			newInstance(clazz);
 		
 		for ( Method method : clazz.getMethods() )
 		{
@@ -84,11 +112,11 @@ public class CommandManager {
 		}
 	}
 	
-	public boolean execute(String name, CommandSender sender, String[] args)
+	public boolean execute(String name, CommandSender sender, NPC npc, String[] args)
 	{
 		for ( Map.Entry<CommandSyntax, CommandBinding> command : commands.entrySet() )
 			if ( new CommandSyntax(name, args).equals(command.getKey()) )
-				return command.getValue().execute(sender, args);
+				return command.getValue().execute(sender, npc, args);
 		return false;
 	}
 	
@@ -139,7 +167,7 @@ public class CommandManager {
 			
 			matcher.find();
 			for ( int i = 0 ; i < max ; ++i )
-				if ( matcher.group(i+1) != null )
+				if ( matcher.group(i+1) != null && !matcher.group(i+1).trim().isEmpty() )
 					map.put(argumentNames.get(i), matcher.group(i+1).trim());
 				
 			return map;
@@ -174,22 +202,35 @@ public class CommandManager {
 	
 	private class CommandBinding
 	{
-		private Class<?> clazz;
 		private Method method; 
 		private CommandSyntax syntax;
+		private Class<?> clazz;
 		
 		public CommandBinding(Class<?> clazz, Method method, CommandSyntax syntax) 
-		{  
+		{
 			this.clazz = clazz;
 			this.method = method;
 			this.syntax = syntax;
 		}
 		
-		public Boolean execute(CommandSender sender, String[] args)
+		public Boolean execute(CommandSender sender, NPC npc, String[] args)
 		{
 			try 
 			{
-				Object result = method.invoke(objects.get(clazz), plugin, sender, syntax.commandArgs(args));
+				Object executer = null;
+				if ( clazz.getSuperclass().equals(AbstractWallet.class) )
+				{
+					if ( npcObjects.get(npc).getKey().equals(clazz) )
+						executer = npcObjects.get(npc).getValue();
+					else
+					{
+						sender.sendMessage(ChatColor.RED + "You cannot use this command for this wallet type");
+						return true;
+					}
+				}
+				else executer = objects.get(clazz);
+				
+				Object result = method.invoke(executer, plugin, sender, npc, syntax.commandArgs(args));
 				if ( result instanceof Boolean )
 					return (Boolean) result;
 				return false;
@@ -200,5 +241,32 @@ public class CommandManager {
 			}
 			return false;
 		}
+	}
+	
+	final class ObjectEntry<K, V> implements Map.Entry<K, V> {
+	    private final K key;
+	    private V value;
+
+	    public ObjectEntry(K key, V value) {
+	        this.key = key;
+	        this.value = value;
+	    }
+
+	    @Override
+	    public K getKey() {
+	        return key;
+	    }
+
+	    @Override
+	    public V getValue() {
+	        return value;
+	    }
+
+	    @Override
+	    public V setValue(V value) {
+	        V old = this.value;
+	        this.value = value;
+	        return old;
+	    }
 	}
 }

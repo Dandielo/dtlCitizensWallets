@@ -4,6 +4,8 @@ import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
 
 public class WalletTrait extends Trait {
+	private CommandManager cManager = Wallets.getInstance().getCommandManager();
+	
 	public WalletTrait() {
 		super("wallet");
 	}
@@ -19,6 +21,7 @@ public class WalletTrait extends Trait {
 	public void onAttach()
 	{
 		wallet = Wallets.getInstance().getWalletObject("private");
+		cManager.registerWalletObject(npc, wallet);
 	}
 	
 	@Override
@@ -26,7 +29,10 @@ public class WalletTrait extends Trait {
 	{
 		wallet = Wallets.getInstance().getWalletObject(data);
 		if ( wallet != null )
+		{
 			wallet.load(data);
+			cManager.registerWalletObject(npc, wallet);
+		}
 	}
 	
 	@Override
@@ -39,5 +45,9 @@ public class WalletTrait extends Trait {
 		}
 	}
 	
-	
+	void setWallet(AbstractWallet wallet)
+	{
+		this.wallet = wallet;
+		cManager.registerWalletObject(npc, wallet);
+	}
 }

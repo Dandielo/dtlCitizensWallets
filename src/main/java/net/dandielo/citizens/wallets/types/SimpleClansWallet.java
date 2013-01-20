@@ -1,8 +1,16 @@
 package net.dandielo.citizens.wallets.types;
 
+import java.util.Map;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.wallets.AbstractWallet;
 import net.dandielo.citizens.wallets.Wallets;
+import net.dandielo.citizens.wallets.command.Command;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 
 public class SimpleClansWallet extends AbstractWallet {
@@ -52,6 +60,33 @@ public class SimpleClansWallet extends AbstractWallet {
 	@Override
 	public void save(DataKey key) {
 		key.setString("clan", clan.getTag());
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "clan (tag)",
+	perm = "dtl.wallets.commands")
+	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		if ( args.containsKey("tag") )
+		{
+			Clan clan = Wallets.getSimpleClans().getClanManager().getClan(args.get("tag"));
+			if ( clan != null )
+			{
+				if ( clan.isLeader((Player) sender) )
+				{
+					this.clan = clan;
+					sender.sendMessage(ChatColor.GOLD + "New clan: " + ChatColor.WHITE + clan.getTag());
+				}
+				else
+					sender.sendMessage(ChatColor.RED + "You can't change this");
+			}
+			else
+				sender.sendMessage(ChatColor.RED + "This clan does not exists");
+		}
+		else
+			sender.sendMessage(ChatColor.GOLD + "Clan: " + ChatColor.WHITE + clan == null ? "" : clan.getTag());
+		return true;
 	}
 
 }
