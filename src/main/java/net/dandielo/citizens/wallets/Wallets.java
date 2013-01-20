@@ -1,7 +1,8 @@
 package net.dandielo.citizens.wallets;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -14,17 +15,12 @@ import net.dandielo.citizens.wallets.types.BankWallet;
 import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
 import net.dandielo.citizens.wallets.types.SimpleClansWallet;
-//import net.dandielo.citizens.wallets.types.TownyWallet;
-//import net.dtl.citizens.wallets.types.FactionsWallet;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-//import com.massivecraft.factions.P;
-//import com.palmergames.bukkit.towny.Towny;
 
 
 
@@ -43,6 +39,10 @@ public class Wallets extends JavaPlugin {
 	//plugin instance
 	private static Wallets instance;
 	
+	//Command manager
+	private CommandManager cManager;
+	
+	   
 	@Override
 	public void onEnable()
 	{
@@ -62,6 +62,8 @@ public class Wallets extends JavaPlugin {
 		initEcon();
 		
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
+		
+		cManager = new CommandManager();
 	}
 	
 	public void initEcon()
@@ -184,6 +186,11 @@ public class Wallets extends JavaPlugin {
 			}
 		}
 		return null;
+	}
+	
+	public CommandManager getCommandManager() 
+	{
+		return cManager;
 	}
 	
 	public static Economy getEconomy()
