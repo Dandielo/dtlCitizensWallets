@@ -4,13 +4,15 @@ import java.text.DecimalFormat;
 
 import net.citizensnpcs.api.util.DataKey;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 public abstract class AbstractWallet {
 	//Decimal format helper ;P
 	protected static DecimalFormat f = new DecimalFormat("#.##");
 	
 	//Abstract Wallet
-	protected Economy econ = Wallets.getEconomy();
+	protected static Permission perm = Wallets.getPerms();
+	protected static Economy econ = Wallets.getEconomy();
 	protected final String typeName;
 	
 	public AbstractWallet(String typeName)

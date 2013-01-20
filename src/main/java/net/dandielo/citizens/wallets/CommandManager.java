@@ -107,7 +107,7 @@ public class CommandManager {
 				
 				registerCommand(annotation.name(), annotation.desc(), annotation.usage(), annotation.aliases());
 				
-				commands.put(syntax, new CommandBinding(clazz, method, syntax));
+				commands.put(syntax, new CommandBinding(clazz, method, syntax, annotation.perm()));
 			}
 		}
 	}
@@ -205,16 +205,23 @@ public class CommandManager {
 		private Method method; 
 		private CommandSyntax syntax;
 		private Class<?> clazz;
+		private String perm;
 		
-		public CommandBinding(Class<?> clazz, Method method, CommandSyntax syntax) 
+		public CommandBinding(Class<?> clazz, Method method, CommandSyntax syntax, String perm) 
 		{
 			this.clazz = clazz;
 			this.method = method;
 			this.syntax = syntax;
+			this.perm = perm;
 		}
 		
 		public Boolean execute(CommandSender sender, NPC npc, String[] args)
 		{
+			if ( !Wallets.getPerms().has(sender, perm) )
+			{
+				sender.sendMessage(ChatColor.RED + "You don't have permissions to use this command");
+				return true;
+			}
 			try 
 			{
 				Object executer = null;

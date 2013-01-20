@@ -1,8 +1,6 @@
 package net.dandielo.citizens.wallets;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -17,6 +15,7 @@ import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
 import net.dandielo.citizens.wallets.types.SimpleClansWallet;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 import org.bukkit.Bukkit;
@@ -33,6 +32,7 @@ public class Wallets extends JavaPlugin {
 
 	//Economy plugin
 	private static Economy economy;
+	private static Permission permissions;
 	private static SimpleClans clans;
 //	private static Towny towny;
 	//private static P factions;
@@ -64,6 +64,7 @@ public class Wallets extends JavaPlugin {
 			registerWalletType("Faction", FactionsWallet.class);*/
 		
 		initEcon();
+		initPerms();
 		
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		cManager.registerCommands(WalletCommands.class);
@@ -110,6 +111,22 @@ public class Wallets extends JavaPlugin {
 			return;
 		}
 	}
+	
+	private void initPerms()
+    {
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+            permissions = permissionProvider.getProvider();
+			info("Using " + permissions.getName() + " plugin");
+        }
+        else 
+        {
+        	//no economy plugin found disable the plugin
+        	info("Permissions plugin not found! Disabling plugin");
+			this.getPluginLoader().disablePlugin(this);
+			return;
+		}
+    }
 	
 	//Hooking into clans and towny bank account
 	public void initializeSoftDependPlugins()
@@ -209,6 +226,11 @@ public class Wallets extends JavaPlugin {
 	public static Economy getEconomy()
 	{
 		return economy;
+	}
+	
+	public static Permission getPerms()
+	{
+		return permissions;
 	}
 	
 /*	public static P getFactions()
