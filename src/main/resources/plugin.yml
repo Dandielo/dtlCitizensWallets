@@ -1,5 +1,5 @@
 name: dtlWallets
-main: net.dtl.citizens.wallets.Wallets
+main: net.dandielo.citizens.wallets.Wallets
 depend: [Citizens,Vault]
 soft-depend: [Towny,SimpleClans,bPermissions]
 version: 0.1 Alpha

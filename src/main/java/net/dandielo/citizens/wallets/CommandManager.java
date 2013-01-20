@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,7 @@ public class CommandManager {
 		if ( commandMap.getCommand(name) == null )
 		{
 			BukkitCommand cmd = new BukkitCommand(name, desc, usage, Arrays.asList(aliases));
+			Wallets.info("registered " + name + " command");
 			commandMap.register(plugin.getName(), cmd);
 	        cmd.setExecutor(executor);
 		}
@@ -69,12 +71,14 @@ public class CommandManager {
 		for ( Method method : clazz.getMethods() )
 		{
 			Command annotation = method.getAnnotation(Command.class);
-			CommandSyntax syntax = new CommandSyntax(annotation.name(), annotation.syntax());
-			
-			registerCommand(annotation.name(), annotation.desc(), annotation.usage(), annotation.aliases());
 			
 			if ( annotation != null )
 			{
+				Wallets.info("Added new command method");
+				CommandSyntax syntax = new CommandSyntax(annotation.name(), annotation.syntax());
+				
+				registerCommand(annotation.name(), annotation.desc(), annotation.usage(), annotation.aliases());
+				
 				commands.put(syntax, new CommandBinding(clazz, method, syntax));
 			}
 		}
@@ -82,50 +86,12 @@ public class CommandManager {
 	
 	public boolean execute(String name, CommandSender sender, String[] args)
 	{
-		return commands.get(new CommandSyntax(name, args)).execute(sender, args);
+		for ( Map.Entry<CommandSyntax, CommandBinding> command : commands.entrySet() )
+			if ( new CommandSyntax(name, args).equals(command.getKey()) )
+				return command.getValue().execute(sender, args);
+		return false;
 	}
 	
-/*	public static void main(String[] a)
-	{
-		Pattern p;
-		String s = "user <name> and (another) (another2)";
-		
-		p = Pattern.compile("(<([^<>]*)>)|([ ]*\\(([^\\(\\)]*)\\))");
-		
-		Matcher m = p.matcher(s);
-		
-		//s = m.replaceAll("");
-		while(m.find())
-		{
-			if ( m.group(1) != null )
-			{
-				System.out.println("a: " + m.group(2));
-				s = s.replace(m.group(1), "(\\S+)");
-			}
-			if ( m.group(3) != null )
-			{
-				System.out.println("a: " + m.group(4));
-				s = s.replace(m.group(3), "( [\\S]*){0,1}");
-			}
-		}
-		
-		System.out.println(s);
-		
-		Pattern pt = Pattern.compile(s);
-		Matcher mm = pt.matcher("user Dandielo and 2 3");
-		System.out.println(Pattern.matches(pt.pattern(), "user Dandielo and sth sth"));
-		//mm.find();
-		int i = 0;
-		mm.find();
-		//while()
-		{
-			System.out.println(i + " " + mm.group(1));
-			System.out.println(i + " " + mm.group(2));
-			System.out.println(i + " " + mm.group(3));
-			++i;
-		}
-			
-	}*/
 	
 	private static class CommandSyntax
 	{
@@ -144,7 +110,7 @@ public class CommandManager {
 		
 		public CommandSyntax(String name, String args) 
 		{
-		//	this.name = name;
+			this.name = name;
 			originalSyntax = args;
 			String syntax = name + " " + originalSyntax;
 			
@@ -159,7 +125,7 @@ public class CommandManager {
 				if ( matcher.group(3) != null )
 				{
 					argumentNames.add(matcher.group(4));
-					syntax = syntax.replace(matcher.group(3), "( [\\S]*)*");
+					syntax = syntax.replace(matcher.group(3), "( [\\S]*){0,1}");
 				}
 			}
 			this.syntax = Pattern.compile(syntax);
@@ -173,8 +139,8 @@ public class CommandManager {
 			
 			matcher.find();
 			for ( int i = 0 ; i < max ; ++i )
-				if ( matcher.group(i) != null )
-					map.put(argumentNames.get(i), matcher.group(i));
+				if ( matcher.group(i+1) != null )
+					map.put(argumentNames.get(i), matcher.group(i+1).trim());
 				
 			return map;
 		}
@@ -190,7 +156,7 @@ public class CommandManager {
 		{
 			if ( !(o instanceof CommandSyntax) )
 				return false;
-			return Pattern.matches(syntax.pattern(), originalSyntax);
+			return Pattern.matches(((CommandSyntax)o).syntax.pattern(), originalSyntax);
 		}
 		
 		//Utils
@@ -230,7 +196,7 @@ public class CommandManager {
 			}
 			catch (Exception e)
 			{
-				System.out.print("Some error here lol");
+				e.printStackTrace();
 			}
 			return false;
 		}

@@ -11,6 +11,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.wallets.command.commands.WalletCommands;
 import net.dandielo.citizens.wallets.types.BankWallet;
 import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
@@ -64,6 +65,18 @@ public class Wallets extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		
 		cManager = new CommandManager();
+		registerCommands();
+	}
+	
+	public void registerCommands()
+	{
+		try 
+		{
+			cManager.registerCommands(WalletCommands.class);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void initEcon()
