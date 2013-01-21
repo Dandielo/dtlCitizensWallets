@@ -2,12 +2,14 @@ package net.dandielo.citizens.wallets;
 
 import java.text.DecimalFormat;
 
+import org.bukkit.event.Listener;
+
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.DataKey;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-public abstract class AbstractWallet {
+public abstract class AbstractWallet implements Listener {
 	//Decimal format helper ;P
 	protected static DecimalFormat f = new DecimalFormat("#.##");
 	

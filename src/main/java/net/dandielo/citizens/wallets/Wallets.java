@@ -161,6 +161,11 @@ public class Wallets extends JavaPlugin {
 			wallets.put(name.toLowerCase(), type);
 			cManager.registerCommands(type);
 			
+			for ( Class<?> face : type.getInterfaces() )
+				if ( face.isInterface() && face.getSimpleName().equals("Listener") )
+					getServer().getPluginManager().registerEvents(type.getConstructor(String.class).newInstance(""), this);
+				
+			
 			info(name + " wallet registered sucessfully!");
 		}
 		catch (Exception e) 
