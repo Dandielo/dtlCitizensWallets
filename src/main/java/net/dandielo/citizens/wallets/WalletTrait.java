@@ -21,6 +21,7 @@ public class WalletTrait extends Trait {
 	public void onAttach()
 	{
 		wallet = Wallets.getInstance().getWalletObject("private");
+		wallet.setNPC(npc);
 		cManager.registerWalletObject(npc, wallet);
 	}
 	
@@ -30,6 +31,7 @@ public class WalletTrait extends Trait {
 		wallet = Wallets.getInstance().getWalletObject(data);
 		if ( wallet != null )
 		{
+			wallet.setNPC(npc);
 			wallet.load(data);
 			cManager.registerWalletObject(npc, wallet);
 		}

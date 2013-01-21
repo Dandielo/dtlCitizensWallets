@@ -44,12 +44,12 @@ public class PlayerWallet extends AbstractWallet {
 		playerName = key.getString("player");
 	}
 
-	public void setOwner(String player)
+	public void setPlayer(String player)
 	{
 		playerName = player;
 	}
 	
-	public String getOwner()
+	public String getPlayer()
 	{
 		return playerName;
 	}

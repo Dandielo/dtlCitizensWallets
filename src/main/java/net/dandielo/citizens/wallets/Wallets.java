@@ -11,6 +11,8 @@ import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.wallets.types.BankWallet;
 import net.dandielo.citizens.wallets.types.GroupWallet;
+import net.dandielo.citizens.wallets.types.InfiniteWallet;
+import net.dandielo.citizens.wallets.types.OwnerWallet;
 import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
 import net.dandielo.citizens.wallets.types.SimpleClansWallet;
@@ -52,9 +54,14 @@ public class Wallets extends JavaPlugin {
 		cManager = new CommandManager();
 		
 		registerWalletType("Player", PlayerWallet.class);
+		registerWalletType("Owner", OwnerWallet.class);
 		registerWalletType("Bank", BankWallet.class);
 		registerWalletType("Private", PrivateWallet.class);
 		registerWalletType("Group", GroupWallet.class);
+		
+		registerWalletType("Infinite", InfiniteWallet.class);
+		//And a second time as admin for CitiTraders compatibility
+		registerWalletType("Admin", InfiniteWallet.class);
 		
 		/*if ( towny != null )
 			registerWalletType("Town", TownyWallet.class);*/
@@ -187,7 +194,8 @@ public class Wallets extends JavaPlugin {
 	
 	AbstractWallet getWalletObject(DataKey dataKey)
 	{
-		final String type = dataKey.getString("type"); 
+		//Added CitiTraders compatibility
+		final String type = dataKey.getString("type");
 		if ( wallets.containsKey(type.toLowerCase()) )
 		{
 			try

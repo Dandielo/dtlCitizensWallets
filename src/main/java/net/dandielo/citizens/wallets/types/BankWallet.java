@@ -36,7 +36,7 @@ public class BankWallet extends AbstractWallet {
 
 	@Override
 	public void load(DataKey key) {
-		bankAccount = key.getString("bank-account");
+		bankAccount = key.getString("bank-account", /* CitiTraders compatibility */ key.getString("account"));
 	}
 	
 	@Override

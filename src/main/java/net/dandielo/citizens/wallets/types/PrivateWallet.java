@@ -42,7 +42,7 @@ public class PrivateWallet extends AbstractWallet {
 
 	@Override
 	public void load(DataKey key) {
-		balance = key.getDouble("balance");
+		balance = key.getDouble("balance", /*CitiTrader compatibility*/ key.getDouble("amount"));
 	}
 
 	@Override
