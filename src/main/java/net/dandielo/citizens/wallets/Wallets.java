@@ -16,6 +16,7 @@ import net.dandielo.citizens.wallets.types.OwnerWallet;
 import net.dandielo.citizens.wallets.types.PlayerWallet;
 import net.dandielo.citizens.wallets.types.PrivateWallet;
 import net.dandielo.citizens.wallets.types.SimpleClansWallet;
+import net.dandielo.citizens.wallets.types.TownyWallet;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -23,6 +24,8 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.palmergames.bukkit.towny.Towny;
 
 
 
@@ -36,7 +39,7 @@ public class Wallets extends JavaPlugin {
 	private static Economy economy;
 	private static Permission permissions;
 	private static SimpleClans clans;
-//	private static Towny towny;
+	private static Towny towny;
 	//private static P factions;
 	
 	//plugin instance
@@ -63,8 +66,8 @@ public class Wallets extends JavaPlugin {
 		//And a second time as admin for CitiTraders compatibility
 		registerWalletType("Admin", InfiniteWallet.class);
 		
-		/*if ( towny != null )
-			registerWalletType("Town", TownyWallet.class);*/
+		if ( towny != null )
+			registerWalletType("Town", TownyWallet.class);
 		if ( clans != null )
 			registerWalletType("Clan", SimpleClansWallet.class);
 	/*	if ( factions != null )
@@ -76,20 +79,8 @@ public class Wallets extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		cManager.registerCommands(WalletCommands.class);
 		
-	//	registerCommands();
 	}
-	
-	public void registerCommands()
-	{
-		try 
-		{
-		//	cManager.registerCommands(WalletCommands.class);
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	public void initEcon()
 	{
 		//initializing vault plugin
@@ -143,11 +134,11 @@ public class Wallets extends JavaPlugin {
 		{
 			info("Hooked into " + clans.getDescription().getFullName());
 		}
-	/*	towny = (Towny) Bukkit.getPluginManager().getPlugin("Towny");
+		towny = (Towny) Bukkit.getPluginManager().getPlugin("Towny");
 		if ( towny != null )
 		{
 			info("Hooked into " + towny.getDescription().getFullName());
-		}*/
+		}
 /*		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
 		if ( factions != null )
 		{
@@ -251,10 +242,10 @@ public class Wallets extends JavaPlugin {
 		return clans;
 	}
 	
-/*	public static Towny getTowny()
+	public static Towny getTowny()
 	{
 		return towny;
-	}*/
+	}
 	
 	//logger info
 	public static void info(String message)
