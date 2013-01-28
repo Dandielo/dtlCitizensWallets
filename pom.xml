@@ -12,7 +12,7 @@
 		<citizens.version>2.0.6-SNAPSHOT</citizens.version>
 		<vault.version>1.2.13-SNAPSHOT</vault.version>
 		<denizen.version>0.8-PRERELEASE</denizen.version>
-		<towny.version>0.8</towny.version>
+		<towny.version>0.82</towny.version>
 		<clans.version>2.3.3</clans.version>
 				<build.number>Unknown</build.number>
 	</properties>
@@ -37,7 +37,7 @@
 		</repository>
 		<repository>
 		    <id>thirdparty</id>
-		    <url>http://93.181.141.191/nexus/content/repositories/thirdparty</url>
+		    <url>http://93.181.141.191:8081/nexus/content/repositories/thirdparty</url>
 		</repository>
 	</repositories> 
 	
@@ -72,7 +72,7 @@
 			<scope>provided</scope> 
 		</dependency> 
 		<dependency>
-			<groupId>net.dandielo.towny</groupId>
+			<groupId>com.palmergames</groupId>
 			<artifactId>Towny</artifactId>
 			<version>${towny.version}</version> 
 			<type>jar</type>
