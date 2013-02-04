@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.exceptions.EconomyException;
@@ -15,7 +14,6 @@ import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.wallets.AbstractWallet;
 import net.dandielo.citizens.wallets.Wallets;
 import net.dandielo.citizens.wallets.command.Command;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
 
 public class TownyWallet extends AbstractWallet {
 
@@ -87,7 +85,7 @@ public class TownyWallet extends AbstractWallet {
 
 	@Override
 	public void save(DataKey key) {
-		key.setString("town", town.getName());
+		key.setString("town", town == null ? "" : town.getName());
 	}
 	
 	@Command(
@@ -113,7 +111,7 @@ public class TownyWallet extends AbstractWallet {
 				sender.sendMessage(ChatColor.RED + "This town does not exists");
 		}
 		else
-			sender.sendMessage(ChatColor.GOLD + "Town: " + ChatColor.WHITE + town == null ? "" : town.getTag());
+			sender.sendMessage(ChatColor.GOLD + "Town: " + ChatColor.WHITE + ( town == null ? "" : town.getTag() ));
 		return true;
 	}
 }

@@ -10,6 +10,7 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.wallets.types.BankWallet;
+import net.dandielo.citizens.wallets.types.FactionsWallet;
 import net.dandielo.citizens.wallets.types.GroupWallet;
 import net.dandielo.citizens.wallets.types.InfiniteWallet;
 import net.dandielo.citizens.wallets.types.OwnerWallet;
@@ -25,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.massivecraft.factions.P;
 import com.palmergames.bukkit.towny.Towny;
 
 
@@ -40,7 +42,7 @@ public class Wallets extends JavaPlugin {
 	private static Permission permissions;
 	private static SimpleClans clans;
 	private static Towny towny;
-	//private static P factions;
+	private static P factions;
 	
 	//plugin instance
 	private static Wallets instance;
@@ -63,15 +65,18 @@ public class Wallets extends JavaPlugin {
 		registerWalletType("Group", GroupWallet.class);
 		
 		registerWalletType("Infinite", InfiniteWallet.class);
+		
 		//And a second time as admin for CitiTraders compatibility
 		registerWalletType("Admin", InfiniteWallet.class);
+
+		initializeSoftDependPlugins();
 		
 		if ( towny != null )
 			registerWalletType("Town", TownyWallet.class);
 		if ( clans != null )
 			registerWalletType("Clan", SimpleClansWallet.class);
-	/*	if ( factions != null )
-			registerWalletType("Faction", FactionsWallet.class);*/
+		if ( factions != null )
+			registerWalletType("Faction", FactionsWallet.class);
 		
 		initEcon();
 		initPerms();
@@ -139,11 +144,11 @@ public class Wallets extends JavaPlugin {
 		{
 			info("Hooked into " + towny.getDescription().getFullName());
 		}
-/*		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
+		factions = (P) Bukkit.getPluginManager().getPlugin("Factions");
 		if ( factions != null )
 		{
 			info("Hooked into " + factions.getDescription().getFullName());
-		}*/
+		}
 	}
 	
 	public boolean registerWalletType(String name, Class<? extends AbstractWallet> type)
@@ -237,10 +242,10 @@ public class Wallets extends JavaPlugin {
 		return permissions;
 	}
 	
-/*	public static P getFactions()
+	public static P getFactions()
 	{
 		return factions;
-	}*/
+	}
 	
 	public static SimpleClans getSimpleClans()
 	{

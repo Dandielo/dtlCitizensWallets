@@ -24,8 +24,7 @@ public class SimpleClansWallet extends AbstractWallet {
 	
 	@Override
 	public boolean deposit(double amount) {
-		if ( clan == null )
-			return false;
+		if ( clan == null ) return false;
 		
 		clan.setBalance(clan.getBalance() + amount);
 		return true;
@@ -33,8 +32,7 @@ public class SimpleClansWallet extends AbstractWallet {
 
 	@Override
 	public boolean withdraw(double amount) {
-		if ( clan == null )
-			return false;
+		if ( clan == null )	return false;
 		
 		if ( clan.getBalance() >= amount )
 		{
@@ -46,8 +44,7 @@ public class SimpleClansWallet extends AbstractWallet {
 
 	@Override
 	public double balance() {
-		if ( clan == null )
-			return 0.0;
+		if ( clan == null )	return 0.0;
 		
 		return clan.getBalance();
 	}
@@ -59,7 +56,7 @@ public class SimpleClansWallet extends AbstractWallet {
 
 	@Override
 	public void save(DataKey key) {
-		key.setString("clan", clan.getTag());
+		key.setString("clan", clan == null ? "" : clan.getTag());
 	}
 	
 	@Command(
@@ -85,7 +82,7 @@ public class SimpleClansWallet extends AbstractWallet {
 				sender.sendMessage(ChatColor.RED + "This clan does not exists");
 		}
 		else
-			sender.sendMessage(ChatColor.GOLD + "Clan: " + ChatColor.WHITE + clan == null ? "" : clan.getTag());
+			sender.sendMessage(ChatColor.GOLD + "Clan: " + ChatColor.WHITE + ( clan == null ? "" : clan.getTag()));
 		return true;
 	}
 

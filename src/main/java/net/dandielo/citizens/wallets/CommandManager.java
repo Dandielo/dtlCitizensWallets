@@ -236,7 +236,7 @@ public class CommandManager {
 					}
 				}
 				else executer = objects.get(clazz);
-				
+
 				Object result = method.invoke(executer, plugin, sender, npc, syntax.commandArgs(args));
 				if ( result instanceof Boolean )
 					return (Boolean) result;
