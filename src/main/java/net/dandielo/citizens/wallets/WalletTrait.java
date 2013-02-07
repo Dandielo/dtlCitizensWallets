@@ -50,6 +50,7 @@ public class WalletTrait extends Trait {
 	void setWallet(AbstractWallet wallet)
 	{
 		this.wallet = wallet;
+		cManager.unregisterWalletObject(npc);
 		cManager.registerWalletObject(npc, wallet);
 	}
 }

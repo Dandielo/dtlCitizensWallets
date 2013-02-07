@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.trait.Owner;
 import net.dandielo.citizens.wallets.command.BukkitCommand;
 import net.dandielo.citizens.wallets.command.Command;
 import net.dandielo.citizens.wallets.command.WalletsExecutor;
@@ -222,6 +223,11 @@ public class CommandManager {
 				sender.sendMessage(ChatColor.RED + "You don't have permissions to use this command");
 				return true;
 			}
+			if ( !npc.getTrait(Owner.class).isOwnedBy(sender) )
+			{
+				sender.sendMessage(ChatColor.RED + "You are not the NPC's owner");
+				return true;
+			}
 			try 
 			{
 				Object executer = null;
@@ -240,13 +246,13 @@ public class CommandManager {
 				Object result = method.invoke(executer, plugin, sender, npc, syntax.commandArgs(args));
 				if ( result instanceof Boolean )
 					return (Boolean) result;
-				return false;
+				return true;
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-			return false;
+			return true;
 		}
 	}
 	

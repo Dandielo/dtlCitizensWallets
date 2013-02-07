@@ -2,6 +2,8 @@ package net.dandielo.citizens.wallets;
 
 import java.text.DecimalFormat;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 
 import net.citizensnpcs.api.npc.NPC;
@@ -27,6 +29,16 @@ public abstract class AbstractWallet implements Listener {
 	void setNPC(NPC npc)
 	{
 		this.npc = npc;
+	}
+	
+	//description method (used for /wallet command)
+	public void sendDescription(CommandSender sender)
+	{
+		sender.sendMessage(ChatColor.GOLD + "Wallet type: " + typeName);
+	}
+	public String typePerm()
+	{
+		return "dtl.wallets.types." + typeName.toLowerCase();
 	}
 	
 	//"virtual money" methods
