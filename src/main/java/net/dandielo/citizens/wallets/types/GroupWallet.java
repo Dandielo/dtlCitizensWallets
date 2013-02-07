@@ -55,87 +55,106 @@ public class GroupWallet extends AbstractWallet {
 		key.setDouble("balance", groups.get(group));
 	}
 
+	@Command(
+	name = "wallet",
+	syntax = "group",
+	perm = "dtl.wallets.commands.group",
+	desc = "shows the group the wallet is assigned to")
+	public void groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		sender.sendMessage(ChatColor.GOLD + "Group: " + ChatColor.GREEN + group);
+	}
+
+	@Command(
+	name = "wallet",
+	syntax = "group set <group>",
+	perm = "dtl.wallets.commands.group.set",
+	desc = "assigns to a new gorup")
+	public void groupWalletSet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		group = args.get("group");
+		if ( !groups.containsKey(group) )
+			groups.put(group, 0.0);
+		sender.sendMessage(ChatColor.GOLD + "Changed group to: " + ChatColor.GREEN + group);
+	}
 	
 	@Command(
 	name = "wallet",
-	syntax = "group <action> (value)",
-	perm = "dtl.wallets.commands")
-	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	syntax = "group balance",
+	perm = "dtl.wallets.commands.group.balance")
+	public void groupWalletBalance(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
-		String action = args.get("action");
-		
-		if ( action.equals("balance") )
+		sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "group deposit <amount>",
+	perm = "dtl.wallets.commands.group.deposit")
+	public void groupWalletDeposit(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{		
+		double value;
+		try
 		{
-			sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
-			return true;
+			value = Double.parseDouble(args.get("amount"));
 		}
-		else if ( action.equals("group") )
+		catch(Exception e)
 		{
-			if ( args.containsKey("value") )
-			{
-				group = args.get("value");
-				if ( !groups.containsKey(group) )
-					groups.put(group, 0.0);
-				sender.sendMessage(ChatColor.GOLD + "Changed group to: " + ChatColor.GREEN + group);
-			}
-			else
-				sender.sendMessage(ChatColor.GOLD + "Group: " + ChatColor.GREEN + group);
-			return true;
+			sender.sendMessage(ChatColor.RED + "Amount must be a number");
+			return;
+		}
+		
+		if ( value <= 0 )
+		{
+			sender.sendMessage(ChatColor.RED + "Cannot accept this amount");
+			return;
+		}
+
+		if ( econ.withdrawPlayer(sender.getName(), value).transactionSuccess() )
+		{
+			deposit(value);
+			sender.sendMessage(ChatColor.GOLD + "Deposited: " + ChatColor.GREEN + f.format(value));
+			sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
 		}
 		else
 		{
-			if ( !args.containsKey("value") )
-			{
-				sender.sendMessage(ChatColor.RED + "Value wasn't set");
-				return true;
-			}
-			
-			double value;
-			try
-			{
-				value = Double.parseDouble(args.get("value"));
-			}
-			catch(Exception e)
-			{
-				sender.sendMessage(ChatColor.RED + "Value must be a number");
-				return true;
-			}
-			
-			if ( value <= 0 )
-			{
-				sender.sendMessage(ChatColor.RED + "Cannot accept this value");
-				return true;
-			}
-			
-			if ( action.equals("withdraw") )
-			{
-				if ( withdraw(value) )
-				{
-					sender.sendMessage(ChatColor.GOLD + "Withdrawed: " + ChatColor.GREEN + f.format(value));
-					sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
-					econ.depositPlayer(sender.getName(), value);
-				}
-				else
-				{
-					sender.sendMessage(ChatColor.RED + "Not enough money within this wallet");
-				}
-			}
-			if ( action.equals("deposit") )
-			{
-				if ( econ.withdrawPlayer(sender.getName(), value).transactionSuccess() )
-				{
-					deposit(value);
-					sender.sendMessage(ChatColor.GOLD + "Deposited: " + ChatColor.GREEN + f.format(value));
-					sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
-				}
-				else
-				{
-					sender.sendMessage(ChatColor.RED + "You dont have enough money");
-				}
-			}
-			
-			
-			return true;
+			sender.sendMessage(ChatColor.RED + "You dont have enough money");
+		}
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "group withdraw <amount>",
+	perm = "dtl.wallets.commands.group.withdraw")
+	public void groupWalletWithdraw(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		
+		double value;
+		try
+		{
+			value = Double.parseDouble(args.get("amount"));
+		}
+		catch(Exception e)
+		{
+			sender.sendMessage(ChatColor.RED + "Amount must be a number");
+			return;
+		}
+		
+		if ( value <= 0 )
+		{
+			sender.sendMessage(ChatColor.RED + "Cannot accept this amount");
+			return;
+		}
+
+		if ( withdraw(value) )
+		{
+			sender.sendMessage(ChatColor.GOLD + "Withdrawed: " + ChatColor.GREEN + f.format(value));
+			sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
+			econ.depositPlayer(sender.getName(), value);
+		}
+		else
+		{
+			sender.sendMessage(ChatColor.RED + "Not enough money within this wallet");
 		}
 	}
 

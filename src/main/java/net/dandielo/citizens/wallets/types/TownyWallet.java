@@ -90,28 +90,34 @@ public class TownyWallet extends AbstractWallet {
 	
 	@Command(
 	name = "wallet",
-	syntax = "town (tag)",
+	syntax = "town",
+	desc = "Shows the town assigned to the wallet",
 	perm = "dtl.wallets.commands")
-	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	public void groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
-		if ( args.containsKey("tag") )
+		sender.sendMessage(ChatColor.GOLD + "Town: " + ChatColor.WHITE + ( town == null ? "" : town.getTag() ));
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "town set <tag>",
+	desc = "assigns a new town to this wallet",
+	usage = "- /wallet town set clantag",
+	perm = "dtl.wallets.commands")
+	public void groupWalletSet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		Town town = towny.getTownyUniverse().getTownsMap().get(args.get("tag"));
+		if ( town != null )
 		{
-			Town town = towny.getTownyUniverse().getTownsMap().get(args.get("tag"));
-			if ( town != null )
+			if ( town.isMayor(towny.getTownyUniverse().getResidentMap().get(sender.getName())) )
 			{
-				if ( town.isMayor(towny.getTownyUniverse().getResidentMap().get(sender.getName())) )
-				{
-					this.town = town;
-					sender.sendMessage(ChatColor.GOLD + "New town: " + ChatColor.WHITE + town.getTag());
-				}
-				else
-					sender.sendMessage(ChatColor.RED + "You can't change this");
+				this.town = town;
+				sender.sendMessage(ChatColor.GOLD + "New town: " + ChatColor.WHITE + town.getTag());
 			}
 			else
-				sender.sendMessage(ChatColor.RED + "This town does not exists");
+				sender.sendMessage(ChatColor.RED + "You can't change this");
 		}
 		else
-			sender.sendMessage(ChatColor.GOLD + "Town: " + ChatColor.WHITE + ( town == null ? "" : town.getTag() ));
-		return true;
+			sender.sendMessage(ChatColor.RED + "This town does not exists");
 	}
 }

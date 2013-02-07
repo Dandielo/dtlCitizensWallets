@@ -61,29 +61,35 @@ public class SimpleClansWallet extends AbstractWallet {
 	
 	@Command(
 	name = "wallet",
-	syntax = "clan (tag)",
-	perm = "dtl.wallets.commands")
-	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	syntax = "clan",
+	desc = "Shows the clan assigned to the wallet",
+	perm = "dtl.wallets.commands.clans")
+	public void groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
-		if ( args.containsKey("tag") )
+		sender.sendMessage(ChatColor.GOLD + "Clan: " + ChatColor.WHITE + ( clan == null ? "" : clan.getTag()));
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "clan set <tag>",
+	desc = "assigns a new clan to this wallet",
+	usage = "- /wallet clan set clantag",
+	perm = "dtl.wallets.commands.clans.set")
+	public void groupWalletSet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		Clan clan = Wallets.getSimpleClans().getClanManager().getClan(args.get("tag"));
+		if ( clan != null )
 		{
-			Clan clan = Wallets.getSimpleClans().getClanManager().getClan(args.get("tag"));
-			if ( clan != null )
+			if ( clan.isLeader((Player) sender) )
 			{
-				if ( clan.isLeader((Player) sender) )
-				{
-					this.clan = clan;
-					sender.sendMessage(ChatColor.GOLD + "New clan: " + ChatColor.WHITE + clan.getTag());
-				}
-				else
-					sender.sendMessage(ChatColor.RED + "You can't change this");
+				this.clan = clan;
+				sender.sendMessage(ChatColor.GOLD + "New clan: " + ChatColor.WHITE + clan.getTag());
 			}
 			else
-				sender.sendMessage(ChatColor.RED + "This clan does not exists");
+				sender.sendMessage(ChatColor.RED + "You can't change this");
 		}
 		else
-			sender.sendMessage(ChatColor.GOLD + "Clan: " + ChatColor.WHITE + ( clan == null ? "" : clan.getTag()));
-		return true;
+			sender.sendMessage(ChatColor.RED + "This clan does not exists");
 	}
 
 }

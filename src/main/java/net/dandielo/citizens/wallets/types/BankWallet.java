@@ -56,18 +56,24 @@ public class BankWallet extends AbstractWallet {
 	
 	@Command(
 	name = "wallet",
-	syntax = "bank (account)",
-	perm = "dtl.wallets.commands")
-	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	syntax = "bank",
+	perm = "dtl.wallets.commands",
+	desc = "Shows the current bank account")
+	public void bankWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
-		if ( args.containsKey("account") )
-		{
-			bankAccount = args.get("account");
-			sender.sendMessage(ChatColor.GOLD + "New bank account: " + ChatColor.GREEN + bankAccount);
-		}
-		else
-			sender.sendMessage(ChatColor.GOLD + "Bank account: " + ChatColor.GREEN + bankAccount);
-		return true;
+		sender.sendMessage(ChatColor.GOLD + "Bank account: " + ChatColor.GREEN + bankAccount);
+	}
+	
+	@Command(
+	name = "wallet",
+	syntax = "bank set <account>",
+	perm = "dtl.wallets.commands",
+	desc = "Sets a new bank account for a bank wallet",
+	usage = "- /wallet bank set BankAccount")
+	public void groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		bankAccount = args.get("account");
+		sender.sendMessage(ChatColor.GOLD + "New bank account: " + ChatColor.GREEN + bankAccount);
 	}
 
 }

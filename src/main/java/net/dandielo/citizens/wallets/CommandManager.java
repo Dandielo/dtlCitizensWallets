@@ -110,26 +110,30 @@ public class CommandManager {
 			if ( annotation != null )
 			{				
 				if ( !name.isEmpty() )
-					AbstractWallet.registerCommandInfo(name, annotation);
+					WalletCommands.registerCommandInfo(name, annotation);
 				
 				Wallets.info("Added new command method");
 				CommandSyntax syntax = new CommandSyntax(annotation.name(), annotation.syntax());
 				
 				registerCommand(annotation.name(), annotation.desc(), annotation.usage(), annotation.aliases());
 				
-				commands.put(syntax, new CommandBinding(clazz, method, syntax, annotation.perm()));
+				commands.put(syntax, new CommandBinding(clazz, method, syntax, annotation));
 			}
 		}
 	}
 	
 	public boolean execute(String name, CommandSender sender, NPC npc, String[] args)
 	{
+		CommandBinding toExecute = null;
 		for ( Map.Entry<CommandSyntax, CommandBinding> command : commands.entrySet() )
 			if ( new CommandSyntax(name, args).equals(command.getKey()) )
-				return command.getValue().execute(sender, npc, args);
-		return false;
+				if ( toExecute == null || toExecute.getPriority() > command.getValue().getPriority() )
+					toExecute = command.getValue();
+
+		if ( toExecute != null )
+			return toExecute.execute(sender, npc, args);
+		return true;
 	}
-	
 	
 	private static class CommandSyntax
 	{
@@ -194,6 +198,7 @@ public class CommandManager {
 		{
 			if ( !(o instanceof CommandSyntax) )
 				return false;
+			
 			return Pattern.matches(((CommandSyntax)o).syntax.pattern(), originalSyntax);
 		}
 		
@@ -215,27 +220,44 @@ public class CommandManager {
 		private Method method; 
 		private CommandSyntax syntax;
 		private Class<?> clazz;
-		private String perm;
+		private Command cmd;
 		
-		public CommandBinding(Class<?> clazz, Method method, CommandSyntax syntax, String perm) 
+		public CommandBinding(Class<?> clazz, Method method, CommandSyntax syntax, Command cmd) 
 		{
 			this.clazz = clazz;
 			this.method = method;
 			this.syntax = syntax;
-			this.perm = perm;
+			this.cmd = cmd; 
 		}
-		
+
+		public int getPriority() {
+			return cmd.priority();
+		}
+
 		public Boolean execute(CommandSender sender, NPC npc, String[] args)
 		{
-			if ( !Wallets.getPerms().has(sender, perm) )
+			if ( !Wallets.getPerms().has(sender, cmd.perm()) )
 			{
 				sender.sendMessage(ChatColor.RED + "You don't have permissions to use this command");
 				return true;
 			}
-			if ( !npc.getTrait(Owner.class).isOwnedBy(sender) )
+			if ( cmd.npc() )
 			{
-				sender.sendMessage(ChatColor.RED + "You are not the NPC's owner");
-				return true;
+				if ( npc == null )
+				{
+					sender.sendMessage(ChatColor.RED + "No npc was selected");
+					return true;
+				}
+				if ( !npc.getTrait(Owner.class).isOwnedBy(sender) )
+				{
+					sender.sendMessage(ChatColor.RED + "You are not the NPC's owner");
+					return true;
+				}
+				if ( !npc.hasTrait(WalletTrait.class) )
+				{
+					sender.sendMessage(ChatColor.RED + "This npc does not have a Wallet Trait");
+					return true;
+				}
 			}
 			try 
 			{

@@ -56,18 +56,25 @@ public class PlayerWallet extends AbstractWallet {
 	
 	@Command(
 	name = "wallet",
-	syntax = "player (player)",
-	perm = "dtl.wallets.commands")
-	public boolean groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	syntax = "player",
+	perm = "dtl.wallets.commands.player",
+	desc = "shows the player assigned to the wallet")
+	public void groupWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
-		if ( args.containsKey("player") )
-		{
-			playerName = args.get("player");
-			sender.sendMessage(ChatColor.GOLD + "New wallet owner: " + ChatColor.GREEN + playerName);
-		}
-		else
-			sender.sendMessage(ChatColor.GOLD + "Wallet owner: " + ChatColor.GREEN + playerName);
-		return true;
+		sender.sendMessage(ChatColor.GOLD + "Wallet owner: " + ChatColor.GREEN + playerName);
+	}
+	
+	
+	@Command(
+	name = "wallet",
+	syntax = "player set <player>",
+	perm = "dtl.wallets.commands.player.set",
+	usage = "- /wallet player set dandielo",
+	desc = "assigns a new player to the wallet")
+	public void groupWalletSet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		playerName = args.get("player");
+		sender.sendMessage(ChatColor.GOLD + "New wallet owner: " + ChatColor.GREEN + playerName);
 	}
 	
 }

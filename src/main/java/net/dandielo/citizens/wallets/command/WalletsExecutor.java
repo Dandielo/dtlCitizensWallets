@@ -4,7 +4,6 @@ import net.citizensnpcs.Citizens;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.wallets.CommandManager;
-import net.dandielo.citizens.wallets.WalletTrait;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,16 +26,7 @@ public class WalletsExecutor implements CommandExecutor {
 		if ( sender instanceof Player )
 		{
 			NPC npc = citizens.getNPCSelector().getSelected(sender);
-			if ( npc != null )
-			{
-				if ( npc.hasTrait(WalletTrait.class) )
-					return cManager.execute(name, sender, npc, args);
-				else
-					sender.sendMessage("This npc does not have the Wallet Trait");
-			}
-			else
-				sender.sendMessage("No npc was selected");
-			
+			return cManager.execute(name, sender, npc, args);
 		}
 		return true;
 	}

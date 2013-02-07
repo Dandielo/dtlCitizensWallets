@@ -11,4 +11,6 @@ public @interface Command {
 	String perm() default "";
 	String usage() default "";
 	String[] aliases() default { };
+	boolean npc() default true;
+	int priority() default 2;
 }

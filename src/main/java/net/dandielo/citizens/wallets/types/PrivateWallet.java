@@ -52,74 +52,90 @@ public class PrivateWallet extends AbstractWallet {
 
 	@Command(
 	name = "wallet",
-	syntax = "private <action> (value)",
-	desc = "Allows to manage wallets",
-	usage = "The <action> argument may be 'balance/withddraw/deposit', where (value) sets the value do deposit or withdraw",
-	perm = "dtl.wallets.commands")
-	public boolean privateWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	syntax = "private balance",
+	desc = "Shows the current balance",
+	perm = "dtl.wallets.commands.private.balance")
+	public void privateWalletBalance(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
 		DecimalFormat f = new DecimalFormat("#.##");
-		String action = args.get("action");
+		sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
+	}
+
+	@Command(
+	name = "wallet",
+	syntax = "private deposit <amount>",
+	desc = "deposits given <amount> to the wallet",
+	usage = "- /wallet private deposit 10.33",
+	perm = "dtl.wallets.commands.private.deposit")
+	public void privateWalletDeposit(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		DecimalFormat f = new DecimalFormat("#.##");
 		
-		if ( action.equals("balance") )
+		double value;
+		try
 		{
+			value = Double.parseDouble(args.get("amount"));
+		}
+		catch(Exception e)
+		{
+			sender.sendMessage(ChatColor.RED + "Value must be a number");
+			return;
+		}
+		
+		if ( value <= 0 )
+		{
+			sender.sendMessage(ChatColor.RED + "Cannot accept this amount");
+			return;
+		}
+
+		if ( econ.withdrawPlayer(sender.getName(), value).transactionSuccess() )
+		{
+			deposit(value);
+			sender.sendMessage(ChatColor.GOLD + "Deposited: " + ChatColor.GREEN + f.format(value));
 			sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
-			return true;
 		}
 		else
 		{
-			if ( !args.containsKey("value") )
-			{
-				sender.sendMessage(ChatColor.RED + "Value wasn't set");
-				return true;
-			}
+			sender.sendMessage(ChatColor.RED + "You dont have enough money");
+		}
+	}
+
+	@Command(
+	name = "wallet",
+	syntax = "private withdraw <amount>",
+	desc = "Withdraws the given <amount> from the wallet",
+	usage = "- /wallet private withdraw 30",
+	perm = "dtl.wallets.commands.private.withdraw")
+	public void privateWallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		DecimalFormat f = new DecimalFormat("#.##");
 			
-			double value;
-			try
-			{
-				value = Double.parseDouble(args.get("value"));
-			}
-			catch(Exception e)
-			{
-				sender.sendMessage(ChatColor.RED + "Value must be a number");
-				return true;
-			}
+		double value;
+		try
+		{
+			value = Double.parseDouble(args.get("amount"));
+		}
+		catch(Exception e)
+		{
+			sender.sendMessage(ChatColor.RED + "Value must be a number");
+			return;
+		}
+		
+		if ( value <= 0 )
+		{
+			sender.sendMessage(ChatColor.RED + "Cannot accept this amount");
+			return;
+		}
 			
-			if ( value <= 0 )
-			{
-				sender.sendMessage(ChatColor.RED + "Cannot accept this value");
-				return true;
-			}
-			
-			if ( action.equals("withdraw") )
-			{
-				if ( withdraw(value) )
-				{
-					sender.sendMessage(ChatColor.GOLD + "Withdrawed: " + ChatColor.GREEN + f.format(value));
-					sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
-					econ.depositPlayer(sender.getName(), value);
-				}
-				else
-				{
-					sender.sendMessage(ChatColor.RED + "Not enough money within this wallet");
-				}
-			}
-			if ( action.equals("deposit") )
-			{
-				if ( econ.withdrawPlayer(sender.getName(), value).transactionSuccess() )
-				{
-					deposit(value);
-					sender.sendMessage(ChatColor.GOLD + "Deposited: " + ChatColor.GREEN + f.format(value));
-					sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
-				}
-				else
-				{
-					sender.sendMessage(ChatColor.RED + "You dont have enough money");
-				}
-			}
-			
-			
-			return true;
+		if ( withdraw(value) )
+		{
+			sender.sendMessage(ChatColor.GOLD + "Withdrawed: " + ChatColor.GREEN + f.format(value));
+			sender.sendMessage(ChatColor.GOLD + "Balance: " + ChatColor.GREEN + f.format(balance()));
+			econ.depositPlayer(sender.getName(), value);
+		}
+		else
+		{
+			sender.sendMessage(ChatColor.RED + "Not enough money within this wallet");
 		}
 	}
 

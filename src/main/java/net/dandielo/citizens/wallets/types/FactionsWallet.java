@@ -66,7 +66,8 @@ public class FactionsWallet extends AbstractWallet {
 	@Command(
 	name = "wallet",
 	syntax = "faction",
-	perm = "dtl.wallets.commands")
+	desc = "Shows the faction assigned to the wallet",
+	perm = "dtl.wallets.commands.factions")
 	public void faction(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
 		sender.sendMessage(ChatColor.GOLD + "Faction: " + ChatColor.WHITE + ( faction == null ? "" : faction.getTag()));
@@ -75,7 +76,9 @@ public class FactionsWallet extends AbstractWallet {
 	@Command(
 	name = "wallet",
 	syntax = "faction set <tag>",
-	perm = "dtl.wallets.commands")
+	desc = "assigns a new faction to this wallet",
+	usage = "- /wallet faction set mytag",
+	perm = "dtl.wallets.commands.factions.set")
 	public void setFaction(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
 		Faction faction = Factions.i.getByTag(args.get("tag"));

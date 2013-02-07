@@ -1,5 +1,8 @@
 package net.dandielo.citizens.wallets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.npc.NPC;
@@ -56,7 +59,67 @@ public class WalletCommands {
 	public void wallet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
 		WalletTrait trait = npc.getTrait(WalletTrait.class);
+		AbstractWallet wallet = trait.getWallet();
+		
+		if ( wallet == null )
+		{
+			sender.sendMessage(ChatColor.RED + "This npc has no wallet set");
+			return;
+		}
+		
 		trait.getWallet().sendDescription(sender);
+	}
+
+	//Commands description holder
+	private static Map<String, List<Command>> commands = new HashMap<String, List<Command>>(); 
+	
+	static void registerCommandInfo(String type, Command command)
+	{
+		List<Command> list = commands.get(type);
+		if ( list == null )
+			list = new ArrayList<Command>();
+		list.add(command);
+		commands.put(type, list);
+	}
+	
+	//Type help command
+	@Command(
+	name = "wallet",
+	syntax = "<type> help",
+	npc = false,
+	priority = 0)
+	public void walletHelp(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	{
+		List<Command> cmds = commands.get(args.get("type"));
+		
+		if ( cmds == null )
+			sender.sendMessage(ChatColor.RED + "No commands are registered for this type");
+		
+		for ( Command cmd : cmds )
+		{
+			sender.sendMessage(nameAndSyntax(cmd));
+			sender.sendMessage(perm(cmd));
+			sender.sendMessage(description(cmd));
+			sender.sendMessage(usage(cmd));
+		}
+	}
+	
+	private static String perm(Command cmd)
+	{
+		return ChatColor.GOLD + "Permission: " + ChatColor.WHITE + cmd.perm();
+	}
+
+	private static String usage(Command cmd) {
+		return ChatColor.GOLD + "Usage: " + ChatColor.WHITE + ( cmd.usage().isEmpty() ? ChatColor.RED + "none" : cmd.usage() );
+	}
+	
+	private static String description(Command cmd) {
+		return ChatColor.GOLD + "Description: " + ChatColor.WHITE + ( cmd.desc().isEmpty() ? ChatColor.RED + "none" : cmd.desc() );
+	}
+
+	private static String nameAndSyntax(Command cmd)
+	{
+		return ChatColor.GOLD + "Command: " + ChatColor.BLUE + cmd.name() + " " + cmd.syntax();
 	}
 	
 }
