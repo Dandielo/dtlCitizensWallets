@@ -88,8 +88,14 @@ public class CommandManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	void registerCommands(Class<?> clazz)
+	{
+		registerCommands("", clazz);
+	}
+	
+	
+	void registerCommands(String name, Class<?> clazz)
 	{
 		if ( objects.containsKey(clazz) ) 
 			return;
@@ -102,7 +108,10 @@ public class CommandManager {
 			Command annotation = method.getAnnotation(Command.class);
 			
 			if ( annotation != null )
-			{
+			{				
+				if ( !name.isEmpty() )
+					AbstractWallet.registerCommandInfo(name, annotation);
+				
 				Wallets.info("Added new command method");
 				CommandSyntax syntax = new CommandSyntax(annotation.name(), annotation.syntax());
 				

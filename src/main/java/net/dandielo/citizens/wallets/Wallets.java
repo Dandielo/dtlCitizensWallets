@@ -164,7 +164,7 @@ public class Wallets extends JavaPlugin {
 				return false;
 			
 			wallets.put(name.toLowerCase(), type);
-			cManager.registerCommands(type);
+			cManager.registerCommands(name.toLowerCase(), type);
 			
 			for ( Class<?> face : type.getInterfaces() )
 				if ( face.isInterface() && face.getSimpleName().equals("Listener") )
