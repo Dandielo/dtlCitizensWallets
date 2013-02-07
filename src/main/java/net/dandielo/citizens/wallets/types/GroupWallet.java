@@ -69,7 +69,8 @@ public class GroupWallet extends AbstractWallet {
 	name = "wallet",
 	syntax = "group set <group>",
 	perm = "dtl.wallets.commands.group.set",
-	desc = "assigns to a new gorup")
+	usage = "- /wallet group set newgroup",
+	desc = "assigns the wallet to a new gorup")
 	public void groupWalletSet(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
 		group = args.get("group");
@@ -81,6 +82,7 @@ public class GroupWallet extends AbstractWallet {
 	@Command(
 	name = "wallet",
 	syntax = "group balance",
+	desc = "shows the balance of the wallets group",
 	perm = "dtl.wallets.commands.group.balance")
 	public void groupWalletBalance(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
@@ -90,6 +92,8 @@ public class GroupWallet extends AbstractWallet {
 	@Command(
 	name = "wallet",
 	syntax = "group deposit <amount>",
+	desc = "deposits <amount> to the wallets group",
+	usage = "- /wallet group deposit 10.00",
 	perm = "dtl.wallets.commands.group.deposit")
 	public void groupWalletDeposit(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{		
@@ -125,6 +129,8 @@ public class GroupWallet extends AbstractWallet {
 	@Command(
 	name = "wallet",
 	syntax = "group withdraw <amount>",
+	desc = "withdraws <amount> from the wallets group",
+	usage = "- /wallet group withdraw 10.10",
 	perm = "dtl.wallets.commands.group.withdraw")
 	public void groupWalletWithdraw(Wallets plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{

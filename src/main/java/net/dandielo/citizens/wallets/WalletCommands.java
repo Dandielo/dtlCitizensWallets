@@ -113,7 +113,7 @@ public class WalletCommands {
 	}
 
 	private static String usage(Command cmd) {
-		return ChatColor.GOLD + "Usage: " + ChatColor.YELLOW + ( cmd.usage().isEmpty() ? ChatColor.RED + "none" : cmd.usage() );
+		return cmd.usage().isEmpty() ? "" : ChatColor.GOLD + "Usage: " + ChatColor.YELLOW + cmd.usage();
 	}
 	
 	private static String description(Command cmd) {
@@ -122,7 +122,7 @@ public class WalletCommands {
 
 	private static String nameAndSyntax(Command cmd)
 	{
-		return ChatColor.GOLD + "Command: " + ChatColor.BLUE + cmd.name() + " " + cmd.syntax();
+		return ChatColor.GOLD + "Command: " + ChatColor.DARK_PURPLE + cmd.name() + " " + cmd.syntax();
 	}
 	
 }
