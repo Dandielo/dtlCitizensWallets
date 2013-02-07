@@ -24,7 +24,7 @@ public class WalletCommands {
 	{
 		WalletTrait trait = npc.getTrait(WalletTrait.class);
 	
-		sender.sendMessage(ChatColor.GOLD + "Wallet type: " + trait.getWallet().getType());
+		sender.sendMessage(ChatColor.GOLD + "Wallet type: " + ChatColor.AQUA + trait.getWallet().getType());
 		return true;
 	}
 	
@@ -36,7 +36,7 @@ public class WalletCommands {
 	{
 		WalletTrait trait = npc.getTrait(WalletTrait.class);
 		
-		AbstractWallet newWallet = Wallets.getInstance().getWalletObject(args.get("type"));
+		AbstractWallet newWallet = Wallets.getInstance().getWalletObject(args.get("wallet"));
 		
 		if ( newWallet != null )
 		{

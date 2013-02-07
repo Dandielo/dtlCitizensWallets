@@ -35,7 +35,7 @@ public abstract class AbstractWallet implements Listener {
 	//description method (used for /wallet command)
 	public void sendDescription(CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.GOLD + "Wallet type: " + typeName);
+		sender.sendMessage(ChatColor.GOLD + "Wallet type: "  + ChatColor.AQUA + typeName);
 	}
 	public String typePerm()
 	{
