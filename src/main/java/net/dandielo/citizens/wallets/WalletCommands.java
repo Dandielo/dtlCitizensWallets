@@ -95,22 +95,25 @@ public class WalletCommands {
 		if ( cmds == null )
 			sender.sendMessage(ChatColor.RED + "No commands are registered for this type");
 		
+		sender.sendMessage(ChatColor.RED + "== "  + ChatColor.GREEN + args.get("type") + ChatColor.RED + " wallet commands ==");
+		
 		for ( Command cmd : cmds )
 		{
 			sender.sendMessage(nameAndSyntax(cmd));
 			sender.sendMessage(perm(cmd));
 			sender.sendMessage(description(cmd));
 			sender.sendMessage(usage(cmd));
+			sender.sendMessage(ChatColor.GREEN + "---");
 		}
 	}
 	
 	private static String perm(Command cmd)
 	{
-		return ChatColor.GOLD + "Permission: " + ChatColor.WHITE + cmd.perm();
+		return ChatColor.GOLD + "Permission: " + ChatColor.DARK_AQUA + cmd.perm();
 	}
 
 	private static String usage(Command cmd) {
-		return ChatColor.GOLD + "Usage: " + ChatColor.WHITE + ( cmd.usage().isEmpty() ? ChatColor.RED + "none" : cmd.usage() );
+		return ChatColor.GOLD + "Usage: " + ChatColor.YELLOW + ( cmd.usage().isEmpty() ? ChatColor.RED + "none" : cmd.usage() );
 	}
 	
 	private static String description(Command cmd) {
