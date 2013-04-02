@@ -20,7 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_4_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_5_R2.CraftServer;
 
 public class CommandManager {
 	private static Wallets plugin = Wallets.getInstance();
